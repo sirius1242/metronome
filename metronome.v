@@ -31,10 +31,10 @@ module metronome(
     );
 		localparam freq = 2500;
 		localparam beat = 25000000 / freq;
-		localparam delta = 60 * freq / 256 / 10;
+		localparam delta = 60 * freq / 256 / 16;
 		//localparam beat = 25000000 / 2093;
 		//localparam beat = 250000 / 2093;
-		//wire[31:0] blank;
+		wire[31:0] blank;
 	 	assign blank = 60 * freq / speed / 16;
 		integer i;
 		integer j;
@@ -70,15 +70,15 @@ module metronome(
 			else if(i >= blank)
 			begin
 				i <= 0;
-				LED[k] <= 0;
+				LED[k] <= 1;
+				LED[k-1] <= 0;
 				k <= k+1;
 			end
-			else if(SW[k] == 1'b0)
+			else if(SW[k] === 0)
 				i <= i+1;
 			else if(i >= blank - delta)
 			begin
 				bell <= ~bell;
-				LED[k] <= 1;
 				i <= i+1;
 			end
 			else
