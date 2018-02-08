@@ -27,10 +27,8 @@ module top(
 		wire [7:0] speed;
 		wire [31:0] data;
 		wire inc, dec, add, min;
-		wire [3:0] k;
 		assign data[15:0] = speed / 100 * 256 + speed % 100 /10 * 16 + speed % 100 % 10;
-		assign data[19:16] = k;
-		metronome metronome1(speed, clk, rst_n, SW, bell, LED, k);
+		metronome metronome1(speed, clk, rst_n, SW, bell, LED);
 		seg seg1(clk, rst_n, data, sel, segment);
 		band band1(clk, dec, inc, add, min, rst_n, speed);
 		no_fitter left_fit(left, rst_n, clk, dec);
