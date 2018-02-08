@@ -21,15 +21,16 @@
 
 
 module top(
-		input clk, rst_n, left, right, up, down,wire play,
+		input clk, rst_n, left, right, up, down, [15:0] SW,
 		output bell, [2:0] sel, [6:0] segment, [15:0] LED
     );
 		wire [7:0] speed;
 		wire [31:0] data;
 		wire inc, dec, add, min;
-		assign data[16:0] = speed / 100 * 256 + speed % 100 /10 * 16 + speed % 100 % 10;
-		assign LED = 0;
-		metronome metronome1(speed, clk, rst_n, play, bell);
+		wire [3:0] k;
+		assign data[15:0] = speed / 100 * 256 + speed % 100 /10 * 16 + speed % 100 % 10;
+		assign data[19:16] = k;
+		metronome metronome1(speed, clk, rst_n, SW, bell, LED, k);
 		seg seg1(clk, rst_n, data, sel, segment);
 		band band1(clk, dec, inc, add, min, rst_n, speed);
 		no_fitter left_fit(left, rst_n, clk, dec);

@@ -24,8 +24,10 @@ module metronome(
 		input [7:0] speed,
 		input	clk,
 		input	rst_n,
-		input play,
-		output reg bell
+		input [15:0] SW,
+		output reg bell,
+		output reg [15:0] LED,
+		output reg [3:0] k
     );
 		localparam freq = 2500;
 		localparam beat = 25000000 / freq;
@@ -33,9 +35,10 @@ module metronome(
 		//localparam beat = 25000000 / 2093;
 		//localparam beat = 250000 / 2093;
 		//wire[31:0] blank;
-	 	assign blank = 60 * freq / speed ;
+	 	assign blank = 60 * freq / speed / 16;
 		integer i;
 		integer j;
+		//reg [3:0] k;
 		reg sign;
 		//assign green = en == 1 ? 1:0;
 		always@(posedge clk or negedge rst_n)
@@ -45,7 +48,7 @@ module metronome(
 				j <= 0;
 				sign <= 0;
 			end
-			else if(~play)
+			else if(SW == 16'h0000)
 				j <= j;
 			else if(j >= beat)
 			begin
@@ -61,14 +64,21 @@ module metronome(
 			begin
 				i <= 0;
 				bell <= 0;
+				k <= 0;
+				LED <= 0;
 			end
-			else if(~play)
-				i <= i;
 			else if(i >= blank)
+			begin
 				i <= 0;
+				LED[k] <= 0;
+				k <= k+1;
+			end
+			else if(SW[k] == 0)
+				i <= i+1;
 			else if(i >= blank - delta)
 			begin
 				bell <= ~bell;
+				LED[k] <= 1;
 				i <= i+1;
 			end
 			else
