@@ -73,7 +73,7 @@ module metronome(
 				LED[k] <= 0;
 				k <= k+1;
 			end
-			else if(SW[k] == 0)
+			else if(SW[k] == 1'b0)
 				i <= i+1;
 			else if(i >= blank - delta)
 			begin
