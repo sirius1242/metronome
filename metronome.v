@@ -25,8 +25,7 @@ module metronome(
 		input	clk,
 		input	rst_n,
 		input play,
-		output reg bell,
-		output wire[31:0] blank
+		output reg bell
     );
 		localparam freq = 2500;
 		localparam beat = 25000000 / freq;

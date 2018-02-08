@@ -27,7 +27,7 @@ module top(
 		wire [7:0] speed;
 		wire [31:0] data;
 		wire inc, dec, add, min;
-		assign data[7:0] = speed;
+		assign data[16:0] = speed / 100 * 256 + speed % 100 /10 * 16 + speed % 100 % 10;
 		assign LED = 0;
 		metronome metronome1(speed, clk, rst_n, play, bell);
 		seg seg1(clk, rst_n, data, sel, segment);
