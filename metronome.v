@@ -28,10 +28,13 @@ module metronome(
 		output reg bell,
 		output wire[31:0] blank
     );
-		localparam beat = 25000000 / 2093;
+		localparam freq = 2500;
+		localparam beat = 25000000 / freq;
+		localparam delta = 60 * freq / 256 / 10;
+		//localparam beat = 25000000 / 2093;
 		//localparam beat = 250000 / 2093;
 		//wire[31:0] blank;
-	 	assign blank = 60 * 2093 / speed ;
+	 	assign blank = 60 * freq / speed ;
 		integer i;
 		integer j;
 		reg sign;
@@ -62,9 +65,9 @@ module metronome(
 			end
 			else if(~play)
 				i <= i;
-			else if(i >= 2 * blank)
-				i <= 0;
 			else if(i >= blank)
+				i <= 0;
+			else if(i >= blank - delta)
 			begin
 				bell <= ~bell;
 				i <= i+1;
